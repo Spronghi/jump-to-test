@@ -1,35 +1,13 @@
+local utils = require("jump-to-test.utils")
+
 local module = {}
-
-local function split(inputstr, sep)
-  if sep == nil then
-    sep = "%s"
-  end
-  local t = {}
-  for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
-    table.insert(t, str)
-  end
-  return t
-end
-
-local function toggle_telescope(file_paths)
-  local conf = require("telescope.config").values
-
-  require("telescope.pickers").new({ initial_mode = "normal" }, {
-    prompt_title = "Jump to test",
-    finder = require("telescope.finders").new_table({
-      results = file_paths,
-    }),
-    previewer = conf.file_previewer({}),
-    sorter = conf.generic_sorter({}),
-    on_complete = { function() vim.cmd "stopinsert" end }
-  }):find()
-end
 
 module.setup = function()
   vim.api.nvim_create_user_command('JumpToTest', function()
     local init_filename = vim.fn.expand("%:t")
 
-    local filename = split(init_filename, ".")[0]
+    local splitted = utils.split(init_filename, ".")
+    local filename = utils.get_first(splitted)
 
     if filename == nil or filename == "" then
       return
@@ -45,10 +23,10 @@ module.setup = function()
 
     handle:close()
 
-    local file_paths = split(result, "\n")
+    local file_paths = utils.split(result, "\n")
 
 
-    toggle_telescope(file_paths)
+    utils.toggle_telescope(file_paths)
   end, {})
 end
 
