@@ -41,6 +41,8 @@ module.setup = function()
 
     local splitted = utils.split(init_filename, ".")
     local filename = utils.get_first(splitted)
+    local extension = utils.get_second(splitted)
+    local is_test_extension = utils.is_test_extension(extension)
 
     if filename == nil or filename == "" then
       return nil
@@ -57,7 +59,7 @@ module.setup = function()
       return utils.toggle_telescope(file_paths)
     end
 
-    if utils.is_test(filename) then
+    if is_test_extension then
       return open_if_not_test(file_paths)
     end
 
