@@ -15,6 +15,18 @@ utils.get_first = function(tbl)
   return tbl[0] or tbl[1]
 end
 
+utils.get_second = function(tbl)
+  if tbl[0] ~= nil then
+    return tbl[1]
+  end
+
+  return tbl[2]
+end
+
+utils.is_test = function(filename)
+  return string.find(filename, "test") or string.find(filename, "spec")
+end
+
 utils.toggle_telescope = function(file_paths)
   local conf = require("telescope.config").values
 
